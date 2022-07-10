@@ -5,6 +5,7 @@
 - flask-cors
 - waitress
 
+
 ## INSTALACIÓN EN PYCHARM:
 
 Para llevar a cabo el proceso de instalación se debe ubicar sobre las palabras subrayadas en el archivo main.py y 

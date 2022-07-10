@@ -1,4 +1,4 @@
 from models.abstractModel import AbstractModel
 
-class Partido(AbstractModel):
+class Party(AbstractModel):
     pass

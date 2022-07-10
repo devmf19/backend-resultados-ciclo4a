@@ -5,7 +5,7 @@ from flask_cors import CORS
 import json
 from waitress import serve
 
-#server
+#server initialization
 app = Flask(__name__)
 cors = CORS(app)
 
@@ -22,8 +22,6 @@ def test():
         "errors": []
     }
     return jsonify(response)
-
-
 
 #execute server
 dataConfig = load_file_config()

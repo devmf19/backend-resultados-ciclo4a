@@ -13,8 +13,8 @@ class PartyController():
 
     def create(self, info):
         print("Creando un partido")
-        new_student = Party(info)
-        return self.repository.save(new_student)
+        new_party = Party(info)
+        return self.repository.save(new_party)
 
     def show(self, id):
         print("Obteniendo un parrtido por id: ", id)

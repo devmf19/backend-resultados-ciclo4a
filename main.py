@@ -20,6 +20,7 @@ def load_file_config():
 #endopints...
 @app.route("/", methods=["GET"])
 def test():
+    #print (request.get_json())
     response = {
         "message": "Hello world...",
         "errors": []

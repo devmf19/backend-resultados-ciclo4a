@@ -5,19 +5,19 @@ from controllers.partyController import PartyController
 
 party_controller = PartyController()
 
-@app.route("/test", methods=["POST"])
-def test():
-    print('prueba')
+@app.route("/test", methods=["GET"])
+def test2():
+    info = request.get_json(force=True)
     response = {
-        "message": "Hello world...",
-        "errors": []
+        "partido": info["name"],
+        "lema": info["motto"]
     }
     
     return jsonify(response)
 
 @app.route("/party", methods=["POST"])
 def create_party():
-    info = request.get_json()
+    info = request.get_json(force=True)
     response = party_controller.create(info)
     return jsonify(response)
 
@@ -27,13 +27,13 @@ def get_partys():
     return jsonify(response);
 
 @app.route("/party/<string:id>", methods=['GET'])
-def get_student(id):
+def get_party(id):
     response = party_controller.show(id);
     return jsonify(response)
 
 @app.route("/party/<string:id>", methods=["PUT"])
 def update_party(id):
-    info = request.get_json()
+    info = request.get_json(force=True)
     response = party_controller.update(id, info)
     return jsonify(response)
 

@@ -4,6 +4,7 @@ from flask import request
 from flask_cors import CORS
 import json
 from waitress import serve
+from pymongo import MongoClient
 
 #server initialization
 app = Flask(__name__)
@@ -22,6 +23,9 @@ def test():
         "errors": []
     }
     return jsonify(response)
+
+''' Routes ''' 
+import routes.party
 
 #execute server
 dataConfig = load_file_config()

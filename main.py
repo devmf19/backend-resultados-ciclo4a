@@ -4,15 +4,21 @@ from flask import request
 from flask_cors import CORS
 import json
 from waitress import serve
+import pymongo
+import certifi
 
 #server initialization
 app = Flask(__name__)
 cors = CORS(app)
 
+
 def load_file_config():
     with open("config.json") as configJson:
         data = json.load(configJson)
     return data
+
+''' Routes ''' 
+import routes.party
 
 #endopints...
 @app.route("/", methods=["GET"])
@@ -22,6 +28,7 @@ def test():
         "errors": []
     }
     return jsonify(response)
+
 
 #execute server
 dataConfig = load_file_config()

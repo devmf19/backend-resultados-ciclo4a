@@ -4,7 +4,7 @@
 - flask-cors
 - waitress
 
-INSTRUCCIONES DE INSTALACIÓN:
+### INSTRUCCIONES DE INSTALACIÓN EN PYCHARM:
 
 Para llevar a cabo el proceso de instalación se debe ubicar sobre las palabras subrayadas en el archivo main.py y se activará un círculo rojo con un signo de exclamación, se debe dar click sobre este y aparecerá la opción de instalar el paquete.
 

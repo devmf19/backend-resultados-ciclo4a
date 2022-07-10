@@ -5,6 +5,16 @@ from controllers.partyController import PartyController
 
 party_controller = PartyController()
 
+@app.route("/test", methods=["POST"])
+def test():
+    print('prueba')
+    response = {
+        "message": "Hello world...",
+        "errors": []
+    }
+    
+    return jsonify(response)
+
 @app.route("/party", methods=["POST"])
 def create_party():
     info = request.get_json()

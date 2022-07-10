@@ -1,6 +1,6 @@
-from interfaceRepository import InterfaceRepositorio
-from models.party import Partido
+from repositories.interfaceRepository import InterfaceRepositorio
+from models.party import Party
 
 
-class PartyRepository(InterfaceRepositorio[Partido]):
+class PartyRepository(InterfaceRepositorio[Party]):
     pass

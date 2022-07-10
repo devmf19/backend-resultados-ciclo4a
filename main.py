@@ -17,7 +17,7 @@ def load_file_config():
         data = json.load(configJson)
     return data
 
-# Routes 
+''' Routes ''' 
 import routes.party
 
 #endopints...

@@ -17,18 +17,18 @@ def load_file_config():
         data = json.load(configJson)
     return data
 
+# Routes 
+import routes.party
+
 #endopints...
 @app.route("/", methods=["GET"])
 def test():
-    #print (request.get_json())
     response = {
         "message": "Hello world...",
         "errors": []
     }
     return jsonify(response)
 
-# Routes 
-import routes.party
 
 #execute server
 dataConfig = load_file_config()

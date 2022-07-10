@@ -1,4 +1,4 @@
-.idea
+/.idea/*
 venv
 
-config.json
+*.json

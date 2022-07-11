@@ -1,10 +1,9 @@
-from functools import reduce
 from repositories.interfaceRepository import InterfaceRepositorio
 from models.pollingStation import PollingStation
 from flask import jsonify
 
 class PollingStationRepository(InterfaceRepositorio[PollingStation]):
-    def countAllvotes(self, id):
+    def countAllvotes(self):
         laColeccion = self.baseDatos[self.coleccion]
         pipeline = [
             {"$unwind":"$candidatos"},

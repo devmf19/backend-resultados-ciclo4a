@@ -19,6 +19,8 @@ def load_file_config():
 
 ''' Routes ''' 
 import routes.party
+import routes.candidate
+import routes.pollingStation
 
 #endopints...
 @app.route("/", methods=["GET"])

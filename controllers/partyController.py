@@ -1,3 +1,4 @@
+from flask import abort
 from models.party import Party
 from repositories.partyRepository import PartyRepository
 
@@ -18,7 +19,11 @@ class PartyController():
 
     def show(self, id):
         print("Obteniendo un parrtido por id: ", id)
-        return self.repository.findById(id)
+        party_found = self.repository.findById(id)
+        if(party_found):
+            return party_found
+        abort(404, description="Party not found")    
+        
 
     def update(self, id, info):
         print("Actualizando un partido por id: ", id)
@@ -31,3 +36,4 @@ class PartyController():
     def delete(self, id):
         print("Eliminando un partido por id: ", id)
         return self.repository.delete(id)
+    

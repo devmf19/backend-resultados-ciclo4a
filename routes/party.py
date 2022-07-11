@@ -2,8 +2,10 @@ from main import app
 from flask import jsonify, request
 
 from controllers.partyController import PartyController
+from controllers.pollingStationController import PollingStationController
 
 party_controller = PartyController()
+ps_controller = PollingStationController()
 
 @app.route("/test", methods=["GET"])
 def test2():
@@ -41,3 +43,8 @@ def update_party(id):
 def delete_party(id):
     response = party_controller.delete(id)
     return jsonify(response)
+
+@app.route("/party/votes", methods=['GET'])
+def get_party_votes():
+    response = ps_controller.getPartyVotes()
+    return (response)

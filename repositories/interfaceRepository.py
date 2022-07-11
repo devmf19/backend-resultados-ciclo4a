@@ -3,6 +3,7 @@ import certifi
 from bson import DBRef
 from bson.objectid import ObjectId
 from typing import TypeVar, Generic, List, get_origin, get_args
+
 import json
 
 T = TypeVar('T')
@@ -20,6 +21,8 @@ class InterfaceRepositorio(Generic[T]):
         with open('config.json') as f:
             data = json.load(f)
         return data
+    
+    
 
     def save(self, item: T):
         laColeccion = self.baseDatos[self.coleccion]
@@ -57,10 +60,10 @@ class InterfaceRepositorio(Generic[T]):
     def findById(self, id):
         laColeccion = self.baseDatos[self.coleccion]
         x = laColeccion.find_one({"_id": ObjectId(id)})
-        x = self.getValuesDBRef(x)
         if x == None:
             x = {}
         else:
+            x = self.getValuesDBRef(x)
             x["_id"] = x["_id"].__str__()
         return x
 
@@ -111,12 +114,15 @@ class InterfaceRepositorio(Generic[T]):
 
     def getValuesDBRefFromList(self, theList):
         newList = []
-        laColeccion = self.baseDatos[theList[0]._id.collection]
-        for item in theList:
-            value = laColeccion.find_one({"_id": ObjectId(item.id)})
-            value["_id"] = value["_id"].__str__()
-            newList.append(value)
-        return newList
+        if(hasattr(theList[0], "_id")):
+            laColeccion = self.baseDatos[theList[0]._id.collection]
+            for item in theList:
+                value = laColeccion.find_one({"_id": ObjectId(item.id)})
+                value["_id"] = value["_id"].__str__()
+                newList.append(value)
+            return newList
+        else:
+            return theList            
 
     def transformObjectIds(self, x):
         for attribute in x.keys():
@@ -149,3 +155,5 @@ class InterfaceRepositorio(Generic[T]):
     def ObjectToDBRef(self, item: T):
         nameCollection = item.__class__.__name__.lower()
         return DBRef(nameCollection, ObjectId(item._id))
+    
+    

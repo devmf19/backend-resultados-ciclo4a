@@ -1,10 +1,12 @@
-from functools import reduce
 from repositories.interfaceRepository import InterfaceRepositorio
 from models.pollingStation import PollingStation
 from flask import jsonify
 
 class PollingStationRepository(InterfaceRepositorio[PollingStation]):
-    def countAllvotes(self, id):
+    
+    '''================================================================
+    Esta función cuenta todos los votos por cada candidato e todas las mesas'''
+    def countAllvotes(self):
         laColeccion = self.baseDatos[self.coleccion]
         pipeline = [
             {"$unwind":"$candidatos"},
@@ -19,6 +21,8 @@ class PollingStationRepository(InterfaceRepositorio[PollingStation]):
 
         return jsonify(total)
     
+    '''===============================================================
+    Esta funcion crea una lista con cada candidato y sus respectivos resultados'''
     def countCandidateVotes(self):
         laColeccion = self.baseDatos[self.coleccion]
         pipeline = [
@@ -34,6 +38,14 @@ class PollingStationRepository(InterfaceRepositorio[PollingStation]):
         result = list(laColeccion.aggregate(pipeline))
         return jsonify(result)
     
+    ''' ==============================================================
+        La siguiente función obtiene dos listas:
+                1) todos los partidos y los votos acumulados para el mismo
+                2) todos los candidatos y susresultados electorales 
+        de estas listas se crea un diccionario en el que se incluyen
+        cada partido con sus resultados acumulados, y dentro del mismo la
+        lista con sus candidatos'''
+        
     def countPartyVotes(self):
         laColeccion = self.baseDatos[self.coleccion]
         party_search = [
@@ -55,18 +67,22 @@ class PollingStationRepository(InterfaceRepositorio[PollingStation]):
                 "canditato_lastname":{"$first":"$candidatos.last_name"},
                 "party":{"$first":"$candidatos.partido"}
             }}
-        ]
-        
-        party_votes = list(laColeccion.aggregate(party_search))
-        candidate_votes = list(laColeccion.aggregate(candidates_search))
-        
-        result = []
-        for party in party_votes:        
-            party_candidates = []
-            for candidate in candidate_votes:
-                if party["_id"] == candidate["party"]:
-                    party_candidates.append(candidate)     
-            party["candidatos"] = party_candidates
-            result.append(party)
-                    
-        return jsonify(result)
+        ]                                                                   # El formato de salida es
+                                                                            # [
+        party_votes = list(laColeccion.aggregate(party_search))             #   {
+        candidate_votes = list(laColeccion.aggregate(candidates_search))    #       "votos":123,
+                                                                            #       "candidatos":[
+        result = []                                                         #           {
+        for party in party_votes:                                           #               "_id": "62cb489f5158a823ba2172c3",
+            party_candidates = []                                           #               "candidato_name":"nombre del candidato",
+            for candidate in candidate_votes:                               #               "candidato_lastname":"apellido del candidato",
+                if party["_id"] == candidate["party"]:                      #               "party": "partido",
+                    party_candidates.append(candidate)                      #               "votos_candidato":123
+            party["candidatos"] = party_candidates                          #           },
+            result.append(party)                                            #       ]
+                                                                            #   },
+        return jsonify(result)                                              # ]
+  
+                                                        
+                                                       
+                                                        

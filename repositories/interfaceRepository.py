@@ -3,6 +3,7 @@ import certifi
 from bson import DBRef
 from bson.objectid import ObjectId
 from typing import TypeVar, Generic, List, get_origin, get_args
+
 import json
 
 T = TypeVar('T')
@@ -20,6 +21,8 @@ class InterfaceRepositorio(Generic[T]):
         with open('config.json') as f:
             data = json.load(f)
         return data
+    
+    
 
     def save(self, item: T):
         laColeccion = self.baseDatos[self.coleccion]
@@ -152,3 +155,5 @@ class InterfaceRepositorio(Generic[T]):
     def ObjectToDBRef(self, item: T):
         nameCollection = item.__class__.__name__.lower()
         return DBRef(nameCollection, ObjectId(item._id))
+    
+    

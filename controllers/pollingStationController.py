@@ -1,6 +1,8 @@
+from tokenize import group
 from flask import abort
 from models.pollingStation import PollingStation
 from repositories.pollingStationRepository import PollingStationRepository
+
 
 class PollingStationController():
     def __init__(self):
@@ -21,7 +23,7 @@ class PollingStationController():
         ps_found = self.repository.findById(id)
         if(ps_found):
             return ps_found
-        abort(404, description="Polling Station not found")     
+        abort(404, description="Polling Station not found")
 
     def update(self, id, info):
         print("Actualizando mesa por id: ", id)
@@ -29,9 +31,21 @@ class PollingStationController():
         old_ps.mesa = info["mesa"]
         old_ps.cedulas = info["cedulas"]
         old_ps.candidatos = info["candidatos"]
-       
-        return self.repository.save(old_ps)    
+
+        return self.repository.save(old_ps)
 
     def delete(self, id):
         print("Eliminando mesa por id: ", id)
         return self.repository.delete(id)
+
+    def getCandidateVotes(self):
+        result = self.repository.countCandidateVotes()
+        return (result)
+    
+    def getPartyVotes(self):
+        result = self.repository.countPartyVotes()
+        return (result)
+    
+    def getAllVotes(self):
+        result = self.repository.countAllvotes()
+        return (result)

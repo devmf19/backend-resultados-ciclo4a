@@ -57,10 +57,10 @@ class InterfaceRepositorio(Generic[T]):
     def findById(self, id):
         laColeccion = self.baseDatos[self.coleccion]
         x = laColeccion.find_one({"_id": ObjectId(id)})
-        x = self.getValuesDBRef(x)
         if x == None:
             x = {}
         else:
+            x = self.getValuesDBRef(x)
             x["_id"] = x["_id"].__str__()
         return x
 
@@ -111,12 +111,15 @@ class InterfaceRepositorio(Generic[T]):
 
     def getValuesDBRefFromList(self, theList):
         newList = []
-        laColeccion = self.baseDatos[theList[0]._id.collection]
-        for item in theList:
-            value = laColeccion.find_one({"_id": ObjectId(item.id)})
-            value["_id"] = value["_id"].__str__()
-            newList.append(value)
-        return newList
+        if(hasattr(theList[0], "_id")):
+            laColeccion = self.baseDatos[theList[0]._id.collection]
+            for item in theList:
+                value = laColeccion.find_one({"_id": ObjectId(item.id)})
+                value["_id"] = value["_id"].__str__()
+                newList.append(value)
+            return newList
+        else:
+            return theList            
 
     def transformObjectIds(self, x):
         for attribute in x.keys():

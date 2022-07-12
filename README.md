@@ -47,7 +47,7 @@ En este caso es muy común y debes actualizar tu colaboración con lo que ya se 
 ```
 git add .
 git commit -m "mensaje con el que identifico mis cambios"
-git pull --rebase
+git pull --rebase origin main
 ```
 
 Ya actualizado puedes subir los cambios en conjunto

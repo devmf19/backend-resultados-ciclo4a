@@ -1,4 +1,4 @@
 from models.abstractModel import AbstractModel
 
-class Mesa(AbstractModel):
+class PollingStation(AbstractModel):
     pass

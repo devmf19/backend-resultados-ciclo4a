@@ -2,6 +2,8 @@ from tokenize import group
 from flask import abort
 from models.pollingStation import PollingStation
 from repositories.pollingStationRepository import PollingStationRepository
+from controllers.candidateController import CandidateController
+from flask import jsonify
 
 
 class PollingStationController():
@@ -21,7 +23,7 @@ class PollingStationController():
     def show(self, id):
         print("Obteniendo mesa por id: ", id)
         ps_found = self.repository.findById(id)
-        if(ps_found):
+        if (ps_found):
             return ps_found
         abort(404, description="Polling Station not found")
 
@@ -40,12 +42,17 @@ class PollingStationController():
 
     def getCandidateVotes(self):
         result = self.repository.countCandidateVotes()
-        return (result)
-    
+        return jsonify(result)
+
     def getPartyVotes(self):
         result = self.repository.countPartyVotes()
-        return (result)
-    
+        return jsonify(result)
+
     def getAllVotes(self):
         result = self.repository.countAllvotes()
-        return (result)
+        return jsonify(result)
+
+    def getNewSenate(self):
+        candidatesVotes = self.repository.countCandidateVotes()
+        sortedList = sorted(candidatesVotes, key=lambda x: x['votos_candidato'], reverse=True)
+        return jsonify(sortedList)

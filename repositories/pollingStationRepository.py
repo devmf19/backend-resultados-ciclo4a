@@ -19,7 +19,7 @@ class PollingStationRepository(InterfaceRepositorio[PollingStation]):
         result = list(laColeccion.aggregate(pipeline))
         total = sum(x["votos"] for x in result)
 
-        return jsonify(total)
+        return total
     
     '''===============================================================
     Esta funcion crea una lista con cada candidato y sus respectivos resultados'''
@@ -33,10 +33,11 @@ class PollingStationRepository(InterfaceRepositorio[PollingStation]):
                 "votos_candidato":{"$sum":"$candidatos.votos"},
                 "canditato_name":{"$first":"$candidatos.name"},
                 "canditato_lastname":{"$first":"$candidatos.last_name"},
+                "partido":{"$first": "$candidatos.partido"}
                 }}
         ]
         result = list(laColeccion.aggregate(pipeline))
-        return jsonify(result)
+        return result
     
     ''' ==============================================================
         La siguiente función obtiene dos listas:
@@ -81,7 +82,7 @@ class PollingStationRepository(InterfaceRepositorio[PollingStation]):
             party["candidatos"] = party_candidates                          #           },
             result.append(party)                                            #       ]
                                                                             #   },
-        return jsonify(result)                                              # ]
+        return result                                                       # ]
   
                                                         
                                                        

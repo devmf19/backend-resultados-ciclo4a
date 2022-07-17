@@ -30,4 +30,11 @@ def update_ps(id):
 @app.route("/table/<string:id>", methods=["DELETE"])
 def delete_ps(id):
     response = ps_controller.delete(id)
-    return jsonify(response)  
+    return jsonify(response)
+
+
+@app.route("/newsenate", methods=['GET'])
+def get_newSenate():
+    response = ps_controller.getNewSenate()
+    print(response)
+    return jsonify(response)

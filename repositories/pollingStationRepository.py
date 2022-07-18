@@ -1,9 +1,28 @@
 from repositories.interfaceRepository import InterfaceRepositorio
 from models.pollingStation import PollingStation
+from models.candidato import Candidato
+from repositories.candidateRepository import CandidateRepository
 from flask import jsonify
 
 class PollingStationRepository(InterfaceRepositorio[PollingStation]):
     
+    # '''================================================================
+    # Esta función cuenta todos los votos por cada candidato e todas las mesas'''
+    # def countAllvotes(self):
+    #     laColeccion = self.baseDatos[self.coleccion]
+    #     pipeline = [
+    #         {"$unwind":"$candidatos"},
+    #         {"$match":{}},
+    #         {"$group":{
+    #             "_id":"$candidatos._id",
+    #             "votos":{"$sum":"$candidatos.candidato.votos"}
+    #             }}
+    #     ]
+    #     result = list(laColeccion.aggregate(pipeline))
+    #     total = sum(x["votos"] for x in result)
+    #
+    #     return total
+
     '''================================================================
     Esta función cuenta todos los votos por cada candidato e todas las mesas'''
     def countAllvotes(self):
@@ -11,15 +30,13 @@ class PollingStationRepository(InterfaceRepositorio[PollingStation]):
         pipeline = [
             {"$unwind":"$candidatos"},
             {"$match":{}},
-            {"$group":{ 
-                "_id":"$candidatos._id",
-                "votos":{"$sum":"$candidatos.candidato.votos"}
+            {"$group":{
+                "_id":"$candidatos.candidato",
+                "votos":{"$sum":"$candidatos.votos"}
                 }}
         ]
         result = list(laColeccion.aggregate(pipeline))
-        total = sum(x["votos"] for x in result)
-
-        return total
+        return result
     
     '''===============================================================
     Esta funcion crea una lista con cada candidato y sus respectivos resultados'''
@@ -83,7 +100,24 @@ class PollingStationRepository(InterfaceRepositorio[PollingStation]):
             result.append(party)                                            #       ]
                                                                             #   },
         return result                                                       # ]
-  
-                                                        
-                                                       
-                                                        
+
+    def createPollingStation(self, info):
+        new_ps = PollingStation(info)
+        result= self.save(new_ps)
+        return jsonify(result)
+
+
+    # def createPollingStation(self, info):
+    #     candidateRepository = CandidateRepository()
+    #     candidatos = info['candidatos']
+    #     for i in range(len(candidatos)):
+    #         candidateid = candidatos[i]['candidate']
+    #         found = candidateRepository.findById(candidateid)
+    #         if (found):
+    #             candidate = Candidato(found)
+    #             candidatos[i]['candidate'] = candidate
+    #         print(candidatos[i]['candidate'])
+    #     new_ps = PollingStation(info)
+    #     result= self.save(new_ps)
+    #     return jsonify(result)
+

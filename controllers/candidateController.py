@@ -20,9 +20,13 @@ class CandidateController():
         print("Creando un candidato")
         party_id = info['partido_id']
         info.pop("partido_id")
-        party = Party(self.partyRepository.findById(party_id))
-        new_candidate = Candidato(info)
-        new_candidate.partido = party
+        prfound= self.partyRepository.findById(party_id)
+        if (prfound):
+            party = Party(self.partyRepository.findById(party_id))
+            new_candidate = Candidato(info)
+            new_candidate.partido = party
+        else:
+            abort(404, description="Party not found")
         return self.repository.save(new_candidate)
 
     def show(self, id):

@@ -19,7 +19,7 @@ def get_ps(id):
 def create_ps():
     info = request.get_json(force=True)
     response = ps_controller.create(info)
-    return jsonify(response)   
+    return response
 
 @app.route("/table/<string:id>", methods=["PUT"])
 def update_ps(id):

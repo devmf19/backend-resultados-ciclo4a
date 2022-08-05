@@ -38,3 +38,15 @@ def get_newSenate():
     response = ps_controller.getNewSenate()
     print(response)
     return jsonify(response)
+
+
+@app.route("/candidates-result", methods=['GET'])
+def getAllCandidatesResults():
+    response = ps_controller.getCandidateVotes()
+    return jsonify(response)
+
+@app.route("/candidates-result/<string:id>", methods=['GET'])
+def getCandidateResultsByID(id):
+    response = ps_controller.getCandidateVotesById(id)
+    return jsonify(response)
+

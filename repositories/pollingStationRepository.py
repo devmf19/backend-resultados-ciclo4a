@@ -6,22 +6,7 @@ from flask import jsonify
 
 class PollingStationRepository(InterfaceRepositorio[PollingStation]):
     
-    # '''================================================================
-    # Esta función cuenta todos los votos por cada candidato e todas las mesas'''
-    # def countAllvotes(self):
-    #     laColeccion = self.baseDatos[self.coleccion]
-    #     pipeline = [
-    #         {"$unwind":"$candidatos"},
-    #         {"$match":{}},
-    #         {"$group":{
-    #             "_id":"$candidatos._id",
-    #             "votos":{"$sum":"$candidatos.candidato.votos"}
-    #             }}
-    #     ]
-    #     result = list(laColeccion.aggregate(pipeline))
-    #     total = sum(x["votos"] for x in result)
-    #
-    #     return total
+
 
     '''================================================================
     Esta función cuenta todos los votos por cada candidato e todas las mesas'''
@@ -43,15 +28,29 @@ class PollingStationRepository(InterfaceRepositorio[PollingStation]):
     def countCandidateVotes(self):
         laColeccion = self.baseDatos[self.coleccion]
         pipeline = [
-            {"$unwind":"$candidatos"},
-            {"$match":{}},
-            {"$group":{ 
-                "_id":"$candidatos._id",
-                "votos_candidato":{"$sum":"$candidatos.votos"},
-                "canditato_name":{"$first":"$candidatos.name"},
-                "canditato_lastname":{"$first":"$candidatos.last_name"},
-                "partido":{"$first": "$candidatos.partido"}
-                }}
+            {"$unwind": "$candidatos"},
+            {"$match": {}},
+            {"$group": {
+                "_id": "$candidatos.candidato",
+                "votos": {"$sum": "$candidatos.votos"},
+                "name":{"$first":"$candidatos.candidato.name"},
+                "last_name": {"$first": "$candidatos.candidato.last_name"}
+            }}
+        ]
+        result = list(laColeccion.aggregate(pipeline))
+        return result
+
+    def countCandidateVotesById(self, id):
+        laColeccion = self.baseDatos[self.coleccion]
+        pipeline = [
+            {"$unwind": "$candidatos"},
+            {"$match": {"candidatos.candidato":id}},
+            {"$group": {
+                "_id": "$candidatos.candidato",
+                "votos": {"$sum": "$candidatos.votos"},
+                "name":{"$first":"$candidatos.candidato.name"},
+                "last_name": {"$first": "$candidatos.candidato.last_name"}
+            }}
         ]
         result = list(laColeccion.aggregate(pipeline))
         return result
@@ -107,17 +106,4 @@ class PollingStationRepository(InterfaceRepositorio[PollingStation]):
         return jsonify(result)
 
 
-    # def createPollingStation(self, info):
-    #     candidateRepository = CandidateRepository()
-    #     candidatos = info['candidatos']
-    #     for i in range(len(candidatos)):
-    #         candidateid = candidatos[i]['candidate']
-    #         found = candidateRepository.findById(candidateid)
-    #         if (found):
-    #             candidate = Candidato(found)
-    #             candidatos[i]['candidate'] = candidate
-    #         print(candidatos[i]['candidate'])
-    #     new_ps = PollingStation(info)
-    #     result= self.save(new_ps)
-    #     return jsonify(result)
 

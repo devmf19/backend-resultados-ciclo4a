@@ -50,7 +50,29 @@ class PollingStationController():
 
     def getCandidateVotes(self):
         result = self.repository.countCandidateVotes()
-        return jsonify(result)
+        for temp in result:
+            acceptedCandidateId = temp['_id']
+            try:
+                candidate = self.candidateRepository.findById(acceptedCandidateId)
+            except:
+                print("Advertencia, no se encuentra información completa del candidato:" + acceptedCandidateId)
+                continue
+            temp['name'] = candidate['name']
+            temp['last_name'] = candidate['last_name']
+        return (result)
+
+    def getCandidateVotesById(self, id):
+        result = self.repository.countCandidateVotesById(id)
+        for temp in result:
+            acceptedCandidateId = temp['_id']
+            try:
+                candidate = self.candidateRepository.findById(acceptedCandidateId)
+            except:
+                print("Advertencia, no se encuentra información completa del candidato:" + acceptedCandidateId)
+                continue
+            temp['name'] = candidate['name']
+            temp['last_name'] = candidate['last_name']
+        return (result)
 
     def getPartyVotes(self):
         result = self.repository.countPartyVotes()

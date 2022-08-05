@@ -47,4 +47,4 @@ def delete_party(id):
 @app.route("/party/votes", methods=['GET'])
 def get_party_votes():
     response = ps_controller.getPartyVotes()
-    return (response)
+    return jsonify(response)

@@ -74,9 +74,6 @@ class PollingStationController():
             temp['last_name'] = candidate['last_name']
         return (result)
 
-    def getPartyVotes(self):
-        result = self.repository.countPartyVotes()
-        return jsonify(result)
 
     def getAllVotes(self):
         result = self.repository.countAllvotes()
@@ -103,6 +100,58 @@ class PollingStationController():
                 resultDict[partyName]=count
             else:
                 resultDict[partyName]=(100/15)
+        #print(resultDict)
+
+        return resultDict
+
+    def getPartyVotes(self):
+        candidatesVotes = self.repository.countAllvotes()
+
+        uniqueParties=set()
+        resultDict={}
+        for temp in candidatesVotes:
+            #find party of candidate
+            acceptedCandidateId=temp['_id']
+            try:
+                candidate=self.candidateRepository.findById(acceptedCandidateId)
+            except:
+                print("Advertencia, no se encuentra información completa del candidato:" +acceptedCandidateId)
+                continue
+            partyName= candidate['partido']['name']
+            if partyName in resultDict:
+                count=resultDict[partyName]
+                count=count+temp["votos"]
+                resultDict[partyName]=count
+            else:
+                resultDict[partyName]=temp["votos"]
+        #print(resultDict)
+
+        return resultDict
+
+
+    def getPartyVotesbyID(self, id):
+        candidatesVotes = self.repository.countAllvotes()
+
+        uniqueParties=set()
+        resultDict={}
+        for temp in candidatesVotes:
+            #find party of candidate
+            acceptedCandidateId=temp['_id']
+            try:
+                candidate=self.candidateRepository.findById(acceptedCandidateId)
+            except:
+                print("Advertencia, no se encuentra información completa del candidato:" +acceptedCandidateId)
+                continue
+            partyName= candidate['partido']['name']
+            if candidate['partido']['_id']!=id:
+                continue
+
+            if partyName in resultDict:
+                count=resultDict[partyName]
+                count=count+temp["votos"]
+                resultDict[partyName]=count
+            else:
+                resultDict[partyName]=temp["votos"]
         #print(resultDict)
 
         return resultDict

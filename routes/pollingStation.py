@@ -50,3 +50,12 @@ def getCandidateResultsByID(id):
     response = ps_controller.getCandidateVotesById(id)
     return jsonify(response)
 
+@app.route("/parties-result/", methods=['GET'])
+def getPartiesResult():
+    response = ps_controller.getPartyVotes()
+    return jsonify(response)
+
+@app.route("/parties-result/<string:id>", methods=['GET'])
+def getPartiesResultbyId(id):
+    response = ps_controller.getPartyVotesbyID(id)
+    return jsonify(response)

@@ -103,6 +103,10 @@ class InterfaceRepositorio(Generic[T]):
             if isinstance(x[k], DBRef):
                 laColeccion = self.baseDatos[x[k].collection]
                 valor = laColeccion.find_one({"_id": ObjectId(x[k].id)})
+                if valor==None:
+                    print("error in the data")
+                    x[k]="Not found"
+                    continue
                 valor["_id"] = valor["_id"].__str__()
                 x[k] = valor
                 x[k] = self.getValuesDBRef(x[k])

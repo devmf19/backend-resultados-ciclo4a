@@ -114,10 +114,11 @@ class PollingStationController():
             acceptedCandidateId=temp['_id']
             try:
                 candidate=self.candidateRepository.findById(acceptedCandidateId)
+                partyName = candidate['partido']['name']
             except:
                 print("Advertencia, no se encuentra información completa del candidato:" +acceptedCandidateId)
                 continue
-            partyName= candidate['partido']['name']
+
             if partyName in resultDict:
                 count=resultDict[partyName]
                 count=count+temp["votos"]

@@ -126,8 +126,12 @@ class PollingStationController():
             else:
                 resultDict[partyName]=temp["votos"]
         #print(resultDict)
-
-        return resultDict
+        #all elements are here in a dictionary, but we require a list
+        returnlist=[]
+        for key in resultDict:
+            item={'name': key, 'votes':resultDict[key]}
+            returnlist.append(item)
+        return returnlist
 
 
     def getPartyVotesbyID(self, id):

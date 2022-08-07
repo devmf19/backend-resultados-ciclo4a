@@ -1,5 +1,6 @@
 from main import app
-from flask import jsonify, request
+from flask import jsonify, request, Response
+import json
 
 from controllers.pollingStationController import PollingStationController 
 
@@ -53,7 +54,7 @@ def getCandidateResultsByID(id):
 @app.route("/parties-result/", methods=['GET'])
 def getPartiesResult():
     response = ps_controller.getPartyVotes()
-    return jsonify(response)
+    return Response(json.dumps(response), mimetype='application/json')
 
 @app.route("/parties-result/<string:id>", methods=['GET'])
 def getPartiesResultbyId(id):
